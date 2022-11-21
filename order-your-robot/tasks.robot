@@ -22,9 +22,13 @@ Order robots from RobotSpareBin Industries Inc
         Close the annoying modal
         Fill the form    ${row}
         Preview the robot
-        Submit the order
+#    Submit the order
 #    Wait Until Keyword Succeeds    5x    1 sec    Submit the order
-        ${pdf}=    Store the receipt as a PDF file    ${row}[Order number]
+        ${pdf}=    Wait Until Keyword Succeeds
+        ...    5x
+        ...    1 sec
+        ...    Store the receipt as a PDF file
+        ...    ${row}[Order number]
         ${screenshot}=    Take a screenshot of the robot    ${row}[Order number]
         Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdf}
         Go to order another robot
@@ -60,6 +64,7 @@ Submit the order
 
 Store the receipt as a PDF file
     [Arguments]    ${order_number}
+    Submit the order
     Wait Until Element Is Visible    id:receipt
     ${sales_results_html}=    Get Element Attribute    id:receipt    outerHTML
     Html To Pdf    ${sales_results_html}    ${OUTPUT_DIR}${/}resultpdf_${order_number}.pdf
